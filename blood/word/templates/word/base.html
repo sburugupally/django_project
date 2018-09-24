@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <style>
+ .tables2 {
+    border:none;
+    border-collapse: collapse;
+    position: absolute;
+    top: 200px;
+    right: -0px;
+
+  }
+
+table1, th, td {
+    border: 1px solid black;
+}
+ </style>
+
+</head>
+<body>
+  <table class ="tables2">
+  <tr>
+    <th align="center">date</th>
+    <th align="center">name</th>
+    <th align="center">meaning</th>
+    <th align="center">opposite</th>
+    <th align="center">synonyms</th>
+    <th align="center">usage</th>
+
+  </tr>
+   {% for data in words %}
+  <tr>
+      <td>{{data.date}}</td>
+      <td>{{data.word_name}}</td>
+      <td>{{data.word_meaning}}</td>
+      <td>{{data.word_opposite}}</td>
+      <td>{{data.word_synonyms}}</td>
+      <td>{{data.word_usage}}</td>
+  </tr>
+    {% endfor %}
+
+</table>
+
+
+</body>
+</html>

@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
+  <style>
+   .container
+   {
+    position: absolute;
+    top: 15px;
+    right: -600px;
+    font-size: 18px;
+   }
+   .date
+   {
+    position: absolute;
+    top: 70px;
+    right: -0px;
+    font-size: 18px;
+   }
+   td
+  {
+    padding:0 15px 0 15px;
+  }
+  th{
+  align="center"
+  }
+  .tables1 {
+    border:none;
+    border-collapse: collapse;
+    position: absolute;
+    top: 300px;
+    right: -10px;
+
+  }
+  .tables2 {
+    border:none;
+    border-collapse: collapse;
+    position: absolute;
+    top: 500px;
+    right: -10px;
+
+  }
+
+table1, th, td {
+    border: 1px solid black;
+}
+
+
+  </style>
+
+</head>
+<body>
+
+<h2>Details of a word</h2>
+<img src="http://www.karen-strong.com/wp-content/uploads/2009/05/wordle.jpg" alt="Girl in a jacket" width="400" height="200">
+
+<div class="container">
+
+  <!-- Trigger the modal with a button -->
+  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Subscribe</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Welcome</h4>
+        </div>
+        <div class="modal-body">
+            {% csrf_token  %}
+        </div>
+            <label for="name"><b>name</b></label>
+            <input type="text" placeholder="Enter name" id="name" name="name" required><br>
+
+            <label for="email"><b>email</b></label>
+            <input type="text" placeholder="Enter email" id="email" name="email" required><br>
+
+            <label for="nation"><b>nation</b></label>
+            <input type="text" placeholder="Enter nation" id="nation" name="nation" required>
+
+
+
+        <div class="modal-footer">
+            <button type="submit" onclick=subscribe()>Login</button>
+
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+    $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", $('input[name=csrfmiddlewaretoken]').val());
+        }
+    }
+     });
+     function subscribe()
+    {
+    console.log('working')
+        $.ajax({
+                    type: 'POST',
+                    url: "{% url 'subscribe' %}",
+                    data:{
+                            'name': $('#name').val(),
+                            'email': $('#email').val(),
+                            'nation':  $('#nation').val(),
+
+                          },
+                    success: function( data )
+                                    {
+                                        $('#result').html(data.message);
+                                        $("#result").addClass("alert alert-success offset4 span4");
+                                        console.log(name)
+                                        console.log(data);
+                                        alert(data['message'])
+                                        window.location.href = '';
+                                    }
+              });
+    }
+
+</script>
+
+
+
+<table class ="tables1">
+  <tr>
+    <th align="center">date</th>
+    <th align="center">name</th>
+    <th align="center">meaning</th>
+    <th align="center">opposite</th>
+    <th align="center">synonyms</th>
+    <th align="center">usage</th>
+  </tr>
+    {% for data in words %}
+  <tr>
+      <td>{{data.date}}</td>
+      <td>{{data.word_name}}</td>
+      <td>{{data.word_meaning}}</td>
+      <td>{{data.word_opposite}}</td>
+      <td>{{data.word_synonyms}}</td>
+      <td>{{data.word_usage}}</td>
+  </tr>
+    {% endfor %}
+</table>
+
+
+
+<div class="date">
+
+    <form>
+    {% csrf_token  %}
+      Date:
+      <input type="date" name="date" id="date">
+        <button type="submit" onclick=datepicker()>submit</button>
+    </form>
+</div>
+<script>
+    $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", $('input[name=csrfmiddlewaretoken]').val());
+        }
+    }
+     });
+     function datepicker()
+    {
+    console.log('working')
+        $.ajax({
+                    type: 'POST',
+                    url: "{% url 'datepicker' %}",
+                    data:{
+                            'date': $('#date').val(),
+
+                          },
+                    success: function( data )
+                                    {
+                                        $('#result').html(data.message);
+                                        $("#result").addClass("alert alert-success offset4 span4");
+                                        console.log(name)
+                                        console.log(data);
+                                        alert(data['message'])
+                                        window.location.href = 'http://127.0.0.1:8000/datepicker';
+                                    }
+              });
+    }
+
+</script>
+
+</body>
+</html>
+
