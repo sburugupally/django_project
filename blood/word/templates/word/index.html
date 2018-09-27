@@ -19,6 +19,13 @@
     right: -600px;
     font-size: 18px;
    }
+   .cont{
+   position: absolute;
+    top: 15px;
+    right: -400px;
+    font-size: 18px;
+
+   }
    .date
    {
     position: absolute;
@@ -45,9 +52,9 @@
     border:none;
     border-collapse: collapse;
     position: absolute;
-    top: 500px;
-    right: -10px;
-
+    top:400px;
+    right: -20px;
+    width: 280px;
   }
 
 table1, th, td {
@@ -93,7 +100,7 @@ table1, th, td {
 
 
         <div class="modal-footer">
-            <button type="submit" onclick=subscribe()>Login</button>
+            <button type="submit" onclick=subscribe()>submit</button>
 
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
@@ -142,7 +149,7 @@ table1, th, td {
 
 <table class ="tables1">
   <tr>
-    <th align="center">date</th>
+    <!--<th align="center">date</th>-->
     <th align="center">name</th>
     <th align="center">meaning</th>
     <th align="center">opposite</th>
@@ -151,7 +158,7 @@ table1, th, td {
   </tr>
     {% for data in words %}
   <tr>
-      <td>{{data.date}}</td>
+      <!--<td>{{data.date}}</td>-->
       <td>{{data.word_name}}</td>
       <td>{{data.word_meaning}}</td>
       <td>{{data.word_opposite}}</td>
@@ -159,6 +166,9 @@ table1, th, td {
       <td>{{data.word_usage}}</td>
   </tr>
     {% endfor %}
+    </tr>
+
+
 </table>
 
 
@@ -185,7 +195,7 @@ table1, th, td {
     console.log('working')
         $.ajax({
                     type: 'POST',
-                    url: "{% url 'datepicker' %}",
+                    url: "{% url 'index' %}",
                     data:{
                             'date': $('#date').val(),
 
@@ -197,12 +207,15 @@ table1, th, td {
                                         console.log(name)
                                         console.log(data);
                                         alert(data['message'])
-                                        window.location.href = 'http://127.0.0.1:8000/datepicker';
+                                        window.location.href = 'http://127.0.0.1:8000/';
                                     }
               });
     }
 
 </script>
+<!--codefordate popup-->
+
+
 
 </body>
 </html>

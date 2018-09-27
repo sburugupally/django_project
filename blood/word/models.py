@@ -21,5 +21,7 @@ class mail(models.Model):
 
 
 class datepicker(models.Model):
-
     date =models.DateField(max_length=20)
+    def __str__(self):
+        return str(self.date)
+
