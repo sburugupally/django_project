@@ -19,29 +19,35 @@ class index(View):
     def get(self,request):
         words = []
         context={}
+        flag=0
         l=wordinfo.objects.filter(date=cur_date).first()
         words.append(l)
 
-        date=datepicker.objects.order_by('date')[0]
-        print("date",date)
-        li = wordinfo.objects.filter(date=date)[0]
-        words.append(li)
+        count=datepicker.objects.all().count()
+        if(count>=1):
+            date=datepicker.objects.order_by('date')[0]
+            print("date",date)
+            li = wordinfo.objects.filter(date=date).first()
+            words.append(li)
+            flag=1
 
         context['words']=words
-        print(words[0])
-        return render(request, 'word/index.html', context)
+        print(type(words))
+        print("c",context)
+        self.datedel()
+        if flag==1:
+            del words[0]
+            return render(request, 'word/index.html', context)
+        else:
+            return JsonResponse({ 'message': "**No words on this day....!!!!**"})
+
     def datedel(self):
         datepicker.objects.all().delete()
-        print("deleted")
     def post(self,request):
         date = request.POST.get('date')
-        print(date)
         self.datedel()
-        print(date)
-        print("IN post")
         obj=datepicker.objects.create(date=date)
         obj.save()
-        #return JsonResponse({'success':True})
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -79,8 +85,7 @@ class Sendmail(View):
         get_currentdate_list = str(wordinfo.objects.filter(date=cur_date).first())
         split_columns_list=re.split("-",get_currentdate_list)
         split_columns_list = "WORD OF THE DAY "+"\n"+"\n" + "WORD: "+split_columns_list[3]+ "\n" + "MEANING: "+split_columns_list[4]+ "\n" + "ANTONYM: "+split_columns_list[5]+ "\n"+ "SYNONYM: "+split_columns_list[6]+ "\n"+  "USAGE: "+split_columns_list[7]
-        print(split_columns_list)
-        #print("L",L)
+
         try:
             html_content = split_columns_list
             print(html_content)
