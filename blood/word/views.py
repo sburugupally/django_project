@@ -28,18 +28,34 @@ class index(View):
             date=datepicker.objects.order_by('date')[0]
             print("date",date)
             li = wordinfo.objects.filter(date=date).first()
+            print("li",li)
+            if(li is None):
+                #return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+                return render(request, 'word/base.html', context)
+
+
+        #     return JsonResponse({'message': "**No words on this day....!!!!**"})
+
             words.append(li)
             flag=1
 
         context['words']=words
-        print(type(words))
-        print("c",context)
+
         self.datedel()
         if flag==1:
             del words[0]
+            #print("c", context)
+
             return render(request, 'word/index.html', context)
-        else:
-            return JsonResponse({ 'message': "**No words on this day....!!!!**"})
+        elif flag==0:
+            return render(request, 'word/index.html', context)
+
+        # if li  is None:
+        #     return JsonResponse({ 'message': "**No words on this day....!!!!**"})
+        #
+
+
 
     def datedel(self):
         datepicker.objects.all().delete()
@@ -56,14 +72,40 @@ class index(View):
 
 def subscribe(request):
     try:
+        flag=0
         name = request.POST.get('name')
         email = request.POST.get('email')
         nation = request.POST.get('nation')
-
+        """
         data_object = mail.objects.create(name=name,email=email, nation=nation)
         data_object.save()
         print(data_object)
         return JsonResponse({'success': True, 'message': "**Subscribed Successfully....!!!!**"})
+        """
+        mailslist=[]
+        emails = mail.objects.values('email')
+        for i in emails:
+            eachmail = i['email']
+            mailslist.append(eachmail)
+        print(mailslist)
+        global  tag
+        tag=0
+        for i in mailslist:
+            #print("email",email)
+            #print("i",i)
+            if email == i:
+                flag=1
+                tag=1
+        if(flag==0):
+            data_object = mail.objects.create(name=name, email=email, nation=nation)
+            data_object.save()
+            print(data_object)
+
+            return JsonResponse({'success': False, 'message': "**Subscribed successfully...!!!**"})
+        else:
+        #data_object = mail.objects.create(name=name, email=email, nation=nation)
+        #data_object.save()
+            return JsonResponse({'success': True, 'message': "you subscribed earlier "})
 
     except Exception as e:
         print(e)
@@ -99,3 +141,38 @@ class Sendmail(View):
         except Exception as e:
             print(e)
             return HttpResponse('cannot Send email')
+
+
+class ONsubscribemail(View):
+
+    def get(self, request):
+        sub=[]
+        email = request.POST.get('email')
+
+        subscriber_id=[]
+        try:
+            html_content = "Thanks for subscribtion"
+            print(html_content)
+            notification="check the email"
+            emails = mail.objects.values('email')
+            for i in emails:
+                eachmail = i['email']
+                sub.append(eachmail)
+            subscriber_id.append(sub[len(sub)-1])
+            print("sub",sub[len(sub)-1])
+            print(sub)
+            print("tag",tag)
+            if(tag==0):
+                send_mail('send mail',html_content,settings.EMAIL_HOST_USER,subscriber_id,fail_silently=False)
+                return HttpResponse('check mail')
+            else:
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+        except Exception as e:
+            print(e)
+            return HttpResponse('cannot Send email')
+    # def post(self,request):
+    #     email = request.POST.get('email')
+    #     print(email)
+    #
