@@ -132,5 +132,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 CRONJOBS = [
-    ('*/55 11 * * *', 'word.cron.index')
+    ('01 14 * * *', 'blood.word.views.Sendmail')
 ]

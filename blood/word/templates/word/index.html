@@ -48,17 +48,17 @@
     right: -10px;
 
   }
-  .tables2 {
-    border:none;
-    border-collapse: collapse;
-    position: absolute;
-    top:400px;
-    right: -20px;
-    width: 280px;
-  }
 
 table1, th, td {
     border: 1px solid black;
+}
+.alert{
+border:none;
+    border-collapse: collapse;
+    position: absolute;
+    top: 320px;
+    right: -10px;
+
 }
 
 
@@ -146,7 +146,6 @@ table1, th, td {
 </script>
 
 
-
 <table class ="tables1">
   <tr>
     <!--<th align="center">date</th>-->
@@ -155,7 +154,9 @@ table1, th, td {
     <th align="center">opposite</th>
     <th align="center">synonyms</th>
     <th align="center">usage</th>
+
   </tr>
+
     {% for data in words %}
   <tr>
       <!--<td>{{data.date}}</td>-->
@@ -166,8 +167,6 @@ table1, th, td {
       <td>{{data.word_usage}}</td>
   </tr>
     {% endfor %}
-    </tr>
-
 
 </table>
 
@@ -216,7 +215,14 @@ table1, th, td {
 <!--codefordate popup-->
 
 
-
+{% for message in messages %}
+  <div class="alert " role="alert">
+    <!--<button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
+      <!--<span aria-hidden="true">&times;</span>-->
+    <!--</button>-->
+      <h1>{{ message }}</h1>
+  </div>
+{% endfor %}
 </body>
 </html>
 

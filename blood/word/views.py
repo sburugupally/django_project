@@ -10,6 +10,8 @@ from django.http import JsonResponse
 import datetime
 from django.conf import settings
 from django.core.mail import send_mail
+from django.contrib import messages
+
 
 
 now = datetime.datetime.now()
@@ -30,31 +32,20 @@ class index(View):
             li = wordinfo.objects.filter(date=date).first()
             print("li",li)
             if(li is None):
+                print("words",type(words))
+                messages.warning(request,"no words on this day")
+                #context['context']="Nowords"
                 #return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-                return render(request, 'word/base.html', context)
-
-
-        #     return JsonResponse({'message': "**No words on this day....!!!!**"})
-
+                #return render(request, 'word/index.html', context=context)
             words.append(li)
             flag=1
-
         context['words']=words
-
         self.datedel()
         if flag==1:
             del words[0]
-            #print("c", context)
-
             return render(request, 'word/index.html', context)
         elif flag==0:
             return render(request, 'word/index.html', context)
-
-        # if li  is None:
-        #     return JsonResponse({ 'message': "**No words on this day....!!!!**"})
-        #
-
 
 
     def datedel(self):
@@ -118,8 +109,9 @@ def datastore(request):
     pass
 
 
-
+# @background(schedule=60*5)
 class Sendmail(View):
+
     def get(self, request):
         l=[]
         get_currentdate_list =[]
@@ -172,7 +164,4 @@ class ONsubscribemail(View):
         except Exception as e:
             print(e)
             return HttpResponse('cannot Send email')
-    # def post(self,request):
-    #     email = request.POST.get('email')
-    #     print(email)
-    #
+
