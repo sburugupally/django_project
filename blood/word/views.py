@@ -16,7 +16,8 @@ from django.contrib import messages
 
 now = datetime.datetime.now()
 cur_date = now.strftime("%Y-%m-%d")
-
+datesplitlist=[]
+curdatelist=[]
 class index(View):
     def get(self,request):
         words = []
@@ -24,19 +25,14 @@ class index(View):
         flag=0
         l=wordinfo.objects.filter(date=cur_date).first()
         words.append(l)
-
         count=datepicker.objects.all().count()
         if(count>=1):
-            date=datepicker.objects.order_by('date')[0]
-            print("date",date)
+            date=str(datepicker.objects.order_by('date')[0])
             li = wordinfo.objects.filter(date=date).first()
-            print("li",li)
             if(li is None):
                 print("words",type(words))
                 messages.warning(request,"no words on this day")
-                #context['context']="Nowords"
-                #return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-                #return render(request, 'word/index.html', context=context)
+
             words.append(li)
             flag=1
         context['words']=words
@@ -94,8 +90,7 @@ def subscribe(request):
 
             return JsonResponse({'success': False, 'message': "**Subscribed successfully...!!!**"})
         else:
-        #data_object = mail.objects.create(name=name, email=email, nation=nation)
-        #data_object.save()
+
             return JsonResponse({'success': True, 'message': "you subscribed earlier "})
 
     except Exception as e:
@@ -109,7 +104,6 @@ def datastore(request):
     pass
 
 
-# @background(schedule=60*5)
 class Sendmail(View):
 
     def get(self, request):

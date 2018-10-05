@@ -8,8 +8,14 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
+  <!---->
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Datepicker - Restrict date range</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
   <style>
    .container
@@ -63,6 +69,8 @@ border:none;
 
 
   </style>
+
+
 
 </head>
 <body>
@@ -176,12 +184,20 @@ border:none;
 
     <form>
     {% csrf_token  %}
-      Date:
-      <input type="date" name="date" id="date">
-        <button type="submit" onclick=datepicker()>submit</button>
+
+      <!--<input type="date" name="date" id="date" class="datepicker" min="2018-09-19" >-->
+        <p>Date: <input type="text" id="date"></p>
+
+        <button type="submit" onclick=datepick()>submit</button>
     </form>
 </div>
 <script>
+
+    $( function() {
+    $( "#date" ).datepicker({ minDate: new Date(2018, 8,19), maxDate: +0 });
+  } );
+
+
     $.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (!this.crossDomain) {
@@ -189,7 +205,7 @@ border:none;
         }
     }
      });
-     function datepicker()
+     function datepick()
     {
     console.log('working')
         $.ajax({
@@ -201,6 +217,7 @@ border:none;
                           },
                     success: function( data )
                                     {
+
                                         $('#result').html(data.message);
                                         $("#result").addClass("alert alert-success offset4 span4");
                                         console.log(name)
@@ -212,14 +229,11 @@ border:none;
     }
 
 </script>
-<!--codefordate popup-->
+
 
 
 {% for message in messages %}
   <div class="alert " role="alert">
-    <!--<button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
-      <!--<span aria-hidden="true">&times;</span>-->
-    <!--</button>-->
       <h1>{{ message }}</h1>
   </div>
 {% endfor %}
