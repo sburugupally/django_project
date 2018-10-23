@@ -21,8 +21,8 @@
    .container
    {
     position: absolute;
-    top: 15px;
-    right: -600px;
+    top: 40px;
+    right: -800px;
     font-size: 18px;
    }
    .cont{
@@ -35,59 +35,76 @@
    .date
    {
     position: absolute;
-    top: 70px;
-    right: -0px;
+    top: 100px;
+    right: 20px;
     font-size: 18px;
    }
-   td
-  {
-    padding:0 15px 0 15px;
-  }
-  th{
-  align="center"
-  }
-  .tables1 {
-    border:none;
-    border-collapse: collapse;
+.submit
+   {
+    background-color: #4CAF50; /* Green */
+    color:white;
     position: absolute;
-    top: 300px;
-    right: -10px;
-
-  }
-
-table1, th, td {
-    border: 1px solid black;
-}
-.alert{
-border:none;
-    border-collapse: collapse;
-    position: absolute;
-    top: 320px;
-    right: -10px;
-
+    top: 40px;
+    right: 20px;
+    border-radius: 8px;
+    padding: 10px;
+    width:30px
+    font-size: 18px;
+   }
+* {
+    box-sizing: border-box;
 }
 
+.column {
+    top:200px;
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: 400px;
+}
+.row {
+   margin-top: 30px;
 
+}
+.scrolltext{
+    top: 10px;
+    background:green;
+    color:white;
+    border:1px solid black;
+    height:30px;
+}
+body{
+ overflow:hidden;
+}
+.img{
+   display: block;
+   position: relative;
+   top: 20px;
+   margin-left: 260px;
+   margin-right: auto;
+
+}
   </style>
 
 
-
+{% load static %}
 </head>
-<body>
+<body style="background-color:lightblue;">
+<div class="scrolltext">
+    <marquee behavior="scroll" direction="left" >Please do subscribe for words updates and follow us on twitter at(teluguwords)and facebook at (teluguwords) page!</marquee>
 
-<h2>Details of a word</h2>
-<img src="http://www.karen-strong.com/wp-content/uploads/2009/05/wordle.jpg" alt="Girl in a jacket" width="400" height="200">
+</div>
+
+<img src="{% static 'word/night.png' %}" alt="Girl in a jacket" width="440" height="220" align="middle"  class="img">
 
 <div class="container">
 
-  <!-- Trigger the modal with a button -->
   <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Subscribe</button>
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
 
-      <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -108,7 +125,6 @@ border:none;
 
 
         <div class="modal-footer">
-            <!--<button type="submit" id="subsubmit" onclick=subscribe()>Done</button>-->
 
           <button type="button" class="btn btn-default" data-dismiss="modal" onclick="subscribe()">Done</button>
         </div>
@@ -154,29 +170,43 @@ border:none;
 </script>
 
 
-<table class ="tables1">
-  <tr>
-    <!--<th align="center">date</th>-->
-    <th align="center">name</th>
-    <th align="center">meaning</th>
-    <th align="center">opposite</th>
-    <th align="center">synonyms</th>
-    <th align="center">usage</th>
 
-  </tr>
+<div class="row">
 
+<div class="column" style="background-color:#aaa;">
     {% for data in words %}
-  <tr>
-      <!--<td>{{data.date}}</td>-->
-      <td>{{data.word_name}}</td>
-      <td>{{data.word_meaning}}</td>
-      <td>{{data.word_opposite}}</td>
-      <td>{{data.word_synonyms}}</td>
-      <td>{{data.word_usage}}</td>
-  </tr>
+
+<span > <h4 style="text-decoration: underline;"> word:</h4> <ul>{{data.word_name}}</ul></span>
+
+<span > <h4 style="text-decoration: underline;"> Transliteration:</h4> <ul> {{data.word_Transliteration}}</ul> </span>
+
+<span > <h4 style="text-decoration: underline;">Meaning:</h4> <ul> {{data.word_meaning}}</ul> </span>
+
+<span > <h4 style="text-decoration: underline;">Synonyms:</h4> <ul> {{data.word_synonyms}} </ul> </span>
+    {% endfor %}
+</div>
+
+  <div class="column" style="background-color:#bbb;">
+    {% for data in words %}
+
+<span> <h4  style="text-decoration: underline;">InEnglish:</h4> <ul> {{data.word_english}} </ul> </span>
+
+    <span > <h4 style="text-decoration: underline;">WordUsage:</h4> <ul> {{data.word_usage}} </ul> </span>
+
+
+<span > <h4 style="text-decoration: underline;">Quotation of the day:</h4> <ul> {{data.quote}} </ul> </span>
+
+<span> <h4 style="text-decoration: underline;">Poem of the day: </h4> <ul> {{data.poem}} </ul> </span>
+
     {% endfor %}
 
-</table>
+
+</div>
+</div>
+
+
+
+
 
 
 
@@ -186,18 +216,17 @@ border:none;
     {% csrf_token  %}
 
       <!--<input type="date" name="date" id="date" class="datepicker" min="2018-09-19" >-->
-        <p>Date: <input type="text" id="date"></p>
-
-        <button type="submit" onclick=datepick()>submit</button>
+        <p>Date: <input type="text" id="date" autocomplete="off"></p>
+        <button class="submit" type="submit" onclick=datepick()>submit</button>
     </form>
 </div>
 <script>
-
     $( function() {
-    $( "#date" ).datepicker({ minDate: new Date(2018, 8,19), maxDate: +0 });
+    $( "#date" ).datepicker({  dateFormat: 'yy-mm-dd',minDate: new Date(2018, 8,19), maxDate: +0 });
   } );
 
-
+</script>
+<script>
     $.ajaxSetup({
     beforeSend: function(xhr, settings) {
         if (!this.crossDomain) {
