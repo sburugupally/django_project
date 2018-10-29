@@ -56,14 +56,14 @@
 }
 
 .column {
-    top:200px;
+    top:180px;
     float: left;
     width: 50%;
     padding: 10px;
     height: 400px;
 }
 .row {
-   margin-top: 30px;
+   margin-top: 10px;
 
 }
 .scrolltext{
@@ -79,9 +79,13 @@ body{
 .img{
    display: block;
    position: relative;
-   top: 20px;
+   top: 5px;
    margin-left: 260px;
    margin-right: auto;
+
+}
+.h4{
+   margin-right: 10px;
 
 }
   </style>
@@ -95,7 +99,7 @@ body{
 
 </div>
 
-<img src="{% static 'word/night.png' %}" alt="Girl in a jacket" width="440" height="220" align="middle"  class="img">
+<img src="{% static 'word/night.png' %}" alt="Girl in a jacket" width="440" height="240" align="middle"  class="img">
 
 <div class="container">
 
@@ -222,7 +226,7 @@ body{
 </div>
 <script>
     $( function() {
-    $( "#date" ).datepicker({  dateFormat: 'yy-mm-dd',minDate: new Date(2018, 8,19), maxDate: +0 });
+    $( "#date" ).datepicker({  dateFormat: 'yy-mm-dd',minDate: new Date(2018, 09,27), maxDate: +0 });
   } );
 
 </script>

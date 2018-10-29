@@ -19,34 +19,9 @@ from email.mime.text import MIMEText
 
 now = datetime.datetime.now()
 cur_date = now.strftime("%Y-%m-%d")
-#datesplitlist=[]
 curdatelist=[]
 class index(View):
-    """
-    def get(self,request):
-        words = []
-        context={}
-        flag=0
-        l=wordinfo.objects.filter(date=cur_date).first()
-        words.append(l)
-        count=datepicker.objects.all().count()
-        if(count>=1):
-            date= datepicker.objects.order_by('date')[0]
-            li = wordinfo.objects.filter(date=date).first()
-            if(li is None):
-                print("words",type(words))
-                messages.warning(request,"no words on this day")
-
-            words.append(li)
-            flag=1
-        context['words']=words
-        self.datedel()
-        if flag==1:
-            del words[0]
-            return render(request, 'word/index.html', context)
-        elif flag==0:
-            return render(request, 'word/index.html', context)
-    """
+    # This function renders today word details and picks the selected date word details
 
     def get(self, request):
         words = []
@@ -71,8 +46,10 @@ class index(View):
             return render(request, 'word/index.html', context)
         elif flag == 0:
             return render(request, 'word/index.html', context)
+    #This function deletes all rows in the database except top row
     def datedel(self):
         datepicker.objects.all().delete()
+    #This function stores the selected date into database
     def post(self,request):
         date = request.POST.get('date')
         print("date",date)
@@ -83,8 +60,7 @@ class index(View):
 
 
 
-
-
+#this function is used to store the subcribed user details
 def subscribe(request):
     try:
         flag=0
@@ -106,8 +82,6 @@ def subscribe(request):
         global  tag
         tag=0
         for i in mailslist:
-            #print("email",email)
-            #print("i",i)
             if email == i:
                 flag=1
                 tag=1
@@ -126,12 +100,12 @@ def subscribe(request):
         return JsonResponse({'success': False, 'message': "**Subscribed Unsuccessfully...!!!**"})
 
 
-#class Datastore(View):
+
 global date
 def datastore(request):
     pass
 
-
+#This class sends mail to the subscribed user  which contains current date word details
 class Sendmail(View):
 
     def get(self, request):
@@ -142,19 +116,15 @@ class Sendmail(View):
         split_columns_list=[]
         get_currentdate_list = str(wordinfo.objects.filter(date=cur_date).first())
         split_columns_list=re.split("-",get_currentdate_list)
-        split_columns_list = "WORD OF THE DAY "+"\n"+"\n" + "WORD: "+split_columns_list[3]+ "\n" +   "Transliteration: "+split_columns_list[4]+ "\n" +   "MEANING: "+split_columns_list[5]+ "\n" + "SYNONYMS: "+split_columns_list[6]+ "\n"+ "INENGLISH: "+split_columns_list[7]+ "\n"+  "USAGE: "+split_columns_list[8] +"\n"+  "QUOTE: "+split_columns_list[9] +"\n"
-        #split_columns_list = "WORD OF THE DAY " + "\n" + "\n" + "WORD: " + split_columns_list[3]
+        split_columns_list = "WORD OF THE DAY "+"\n"+"\n" + "WORD: "+split_columns_list[3]+ "\n" +   "Transliteration: "+split_columns_list[4]+ "\n" +   "MEANING: "+split_columns_list[5]+ "\n" + "SYNONYMS: "+split_columns_list[6]+ "\n"+ "INENGLISH: "+split_columns_list[7]+ "\n"+  "USAGE: "+split_columns_list[8] +"\n"+  "QUOTE: "+split_columns_list[9]
 
 
         l=[]
 
         try:
-            s= "ఉప్పుగప్పురంబు న్రొక్కపోలికనుండుచూడచూడ రుచుల జాడవేరుపురుషులందు పుణ్య పురుషులువేరయవిశ్వదాభిరామ వినుర వేమ"
             html_content=split_columns_list
             s=html_content
-           # msg = MIMEText(s, _charset="UTF-8")
 
-            # print(html_content)
             notification="check the email"
             emails= mail.objects.values('email')
             for i in emails:
@@ -166,7 +136,7 @@ class Sendmail(View):
             print(e)
             return HttpResponse('cannot Send email')
 
-
+ #sends notification through mail to subscribed users
 class ONsubscribemail(View):
 
     def get(self, request):
@@ -196,7 +166,7 @@ class ONsubscribemail(View):
         except Exception as e:
             print(e)
             return HttpResponse('cannot Send email')
-
+#this class posts the current date word details on twitter
 class Twitter(View):
     def get(self, request):
         l = []
@@ -223,11 +193,8 @@ class Twitter(View):
                 tweet = split_columns_list
 
                 status = api.update_status(status=tweet)
-                #print("status", status)
                 return HttpResponse("check tweet")
-                # return JsonResponse({'success': True, 'message': "tweet done..!!!**"})
         except Exception as e:
             print(e)
-                # return JsonResponse({'success': False, 'message': "tweet not done...!!!**"})
             return HttpResponse("tweet not done")
 
